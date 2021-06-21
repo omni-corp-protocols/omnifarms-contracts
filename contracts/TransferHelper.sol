@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity 0.6.12;
 
 // helper methods for interacting with ERC20 tokens that do not consistently return true/false

@@ -17,14 +17,14 @@ interface IERCBurn {
     function allowance(address owner, address spender) external returns (uint256);
 }
 
-interface FarmFactory {
+interface FarmFactoryI {
     function registerFarm (address _farmAddress) external;
 }
 
 contract FarmGenerator01 is Ownable {
     using SafeMath for uint256;
     
-    FarmFactory public factory;
+    FarmFactoryI public factory;
     
     address payable devaddr;
     
@@ -49,7 +49,7 @@ contract FarmGenerator01 is Ownable {
         uint256 amountFee;
     }
     
-    constructor(FarmFactory _factory) public {
+    constructor(FarmFactoryI _factory) public {
         factory = _factory;
         devaddr = msg.sender;
         gFees.useGasToken = false;
@@ -123,9 +123,13 @@ contract FarmGenerator01 is Ownable {
     function createFarm (IERC20 _rewardToken, uint256 _amount, IERC20 _farmToken, uint256 _blockReward, uint256 _startBlock, uint256 _bonusEndBlock, uint256 _bonus) public payable returns (address) {
         require(_startBlock > block.number, 'START'); // ideally at least 24 hours more to give farmers time
         require(_bonus > 0, 'BONUS');
-        require(address(_rewardToken) != address(0), 'TOKEN');
+        require(address(_rewardToken) != address(0), '_rewardToken');
+        require(address(_farmToken) != address(0), '_farmToken');
         require(_blockReward > 1000, 'BR'); // minimum 1000 divisibility per block reward
         
+        // sanity check
+        _farmToken.totalSupply();
+
         FarmParameters memory params;
         (params.endBlock, params.requiredAmount, params.amountFee) = determineEndBlock(_amount, _blockReward, _startBlock, _bonusEndBlock, _bonus);
         
