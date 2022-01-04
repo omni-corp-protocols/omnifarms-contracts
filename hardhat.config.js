@@ -16,6 +16,10 @@ module.exports = {
     polygon: {
       url: process.env.polygonRpc || "https://rpc-mainnet.matic.network",
       accounts: [privateKey]
+    },
+    metis: {
+      url: process.env.metis_rpc || "https://andromeda.metis.io/?owner=1088",
+      accounts: [privateKey]
     }
   },
   solidity: {
